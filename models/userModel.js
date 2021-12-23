@@ -8,11 +8,13 @@ const userSchema = new mongoose.Schema({
     email:{
         type:String,
         required:true,
-        trim:true
+        trim:true,
+        unique:true
+        
     },
     password:{
         type:String,
-        required:true,
+        required:true
        
     },
     role:{
@@ -20,12 +22,12 @@ const userSchema = new mongoose.Schema({
         default:0
     },
     cart:{
-        type:String,
+       type:Array,
         default:[]
        
     }
 },{
     timestamps:true
 })
-
-module.exports = mongoose.model("Users",userSchema)
+const User = mongoose.model("Users",userSchema)
+module.exports = User

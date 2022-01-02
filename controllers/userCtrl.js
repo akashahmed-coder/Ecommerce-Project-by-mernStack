@@ -4,41 +4,89 @@ const jwt = require('jsonwebtoken')
 const userCtrl = {
     register: async(req,res)=>{
         try{
-            const {name,email,password} = req.body
-            if( !name || !email || !password){
-                return res.status(422).json({error:"please filled the input field properly"})
-            }
-            const userExist = await User.findOne({email:email})
-            if(userExist){
-                res.status(400).json({error:"Email has already present"})
-            }
-           if(password.length < 6 ){
-            res.status(400).json({error:"password need atleast 6 charactor"})
-           }
-           const passHass = await bycrpt.hash(password,10)
-           const newUser = new User({name,email,password:passHass})
-           await newUser.save();
-          
-               const accessToken = createAccessToken({id: newUser._id})
-               const refreshToken = createRefreshToken({id: newUser._id})
-               res.cookie('refreshToken',refreshToken,{
-                   httpOnly:true,
-                   path:"/user/refresh_token"
-
-               })
-               res.status(201).json({message:"registration successfull"})
-        
-           
+           const {name,email,password} = req.body
+          const user = await User.findOne({email})
+          if(user){
+            return  res.status(400).json({err:"this email has already present"})
+          }
+     if(password.length < 6){
+          return  res.status(400).json({err:"password needed atlest 6 charactor"})
+            
+          }
+          const passwordHash = await bycrpt.hash(password,10)
+          const newUser = new User({name,email,password:passwordHash})
+          await newUser.save()
+          res.send("registration success")
           
         }catch(err){
-          console.log(err)
+         res.json(err.message)
         }
     
     },
+    login: async(req,res)=>{
+     try{
+        const {email,password} = req.body
+        const user = await User.findOne({email})
+   
+        if(!user){
+          return  res.status(400).json({erorr:"user dosenot exist"})
+        }
+      
+        const isMatch = await bycrpt.compare(password,user.password)
+   
+        if(!isMatch){
+            return  res.status(400).json({erorr:"password doesnot match"})
+        }
+           
+        const accessToken = createAccessToken({id: user.id})
+        const refreshToken = createRefreshToken({id: user.id})
+        res.cookie('refreshToken',refreshToken,{
+            httpOnly:true,
+            path:"/user/refresh_token"
+   
+        })
+        res.json({accessToken})
+     
+     }catch(err){
+        res.status(500).send(err.message)
+     }
+
+    },
+    logout: async(req,res) =>{
+      try{
+    res.clearCookie('refreshToken',{path:"/user/refresh_token"})
+    res.status(201).json({msg:"logged out"})
+      }catch(err){
+        res.status(500).send(err.message)
+      }
+    },
     refresh_token: (req,res)=>{
+       try{
         const rf_token = req.cookies.refreshToken
-        res.json({rf_token})
+        if(!rf_token){
+            return  res.status(400).json({err:"please Login or Register"})
+        }
+       jwt.verify(rf_token,process.env.REFRESS_TOKEN,(err,user)=>{
+             if(err){
+              return  res.status(400).json({err:"please Login or Register"})
+             }
+            const accessToken = createAccessToken({id: user.id})
+            res.json({accessToken})
+         })
+       }catch(err){
+           res.status(500).send(err.message)
+       }
+
         
+    },
+    getUser: async (req,res) =>{
+     try {
+       const user = await User.findById(req.user.id).select("-password")
+       if(!user) return res.status(400).json({msj:"User Does Not Exist"})
+       res.json(user)
+     } catch (error) {
+       res.status(500).json({error})
+     }
     }
 }
 
@@ -48,7 +96,7 @@ const createAccessToken = (user) =>{
 }
 
 const createRefreshToken = (user) =>{
-    const token =  jwt.sign(user,process.env.REFRESS_TOKEN,{expiresIn:'1d'})
+    const token =  jwt.sign(user,process.env.REFRESS_TOKEN,{expiresIn:'7d'})
     return(token)
    }
 

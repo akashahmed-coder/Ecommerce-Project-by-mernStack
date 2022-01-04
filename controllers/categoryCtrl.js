@@ -3,7 +3,7 @@ const Category = require('../models/categoryModel')
 const categoryCtrl = {
    getCategory: async (req,res)=>{
       try{
-        console.log(Object.keys)
+       
         const category = await Category.find()
         res.json(category)
       }catch(err){
@@ -13,6 +13,7 @@ const categoryCtrl = {
    createCategory:async(req,res)=>{
      try{
       const {name} = req.body
+      if(!name) return res.status(400).json({msg:"please type a category name"})
       const category = await Category.findOne({name})
       if(category) return  res.status(400).json({msg:"category is already created"})
       const newCategory = await new Category({

@@ -32,10 +32,7 @@ const productsSchema = new mongoose.Schema({
         required:true,
     },
     category:{
-        type:String,
-        required:true,
-        unique:true
-        
+        type:String  
     },
     cheked:{
         type:Boolean,
@@ -48,5 +45,5 @@ const productsSchema = new mongoose.Schema({
     }
 })
 
-const Products = mongoose.model("Products",productsSchema)
+const Products = mongoose.model("Producs",productsSchema)
 module.exports = Products

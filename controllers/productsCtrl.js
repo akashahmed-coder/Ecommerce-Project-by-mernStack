@@ -10,26 +10,44 @@ class APIfeatures {
  const queryObj = {...this.queryString}
  const excludedFields = ['page','sort','limit']
  excludedFields.forEach(el=> delete(queryObj[el]))
- console.log(queryObj)
  let querySt = JSON.stringify(queryObj)
- console.log(querySt)
  querySt = querySt.replace(/\b(gte|gt|lt|lte|regex)\b/g , match => '$'+ match)
- console.log(querySt)
  this.query.find(JSON.parse(querySt))
- console.log(JSON.parse(querySt))
  return this;
 
    }
-   sorting(){}
-   paginating(){}
+   sorting(){
+      if(this.queryString.sort){
+         
+         const sortBy = this.queryString.sort.split(',').join('')
+         console.log(sortBy)
+         this.qurey = this.query.sort(sortBy)
+      }else{
+         this.query.sort("-createdAt")
+      }
+      return this;
+   }
+   paginating(){
+      const page = this.queryString.page * 1 || 1
+      const limit = this.queryString.limit * 1 || 9
+      const skip = (page - 1) * limit;
+      this.query = this.query.skip(skip).limit(limit)
+      return this;
+   }
 }
 const productsCtrl = {
     getProduct:async(req,res)=>{
      try {
-        const feature = new APIfeatures(Products.find(),req.query).filtering()
-        const getProduct = await feature.query
-      
-        res.json({getProduct})
+        const feature = new APIfeatures(Products.find(),req.query)
+        .filtering().sorting().paginating()
+        const product = await feature.query
+      // const getProduct = await Products.find().select(["title","price","product_id"]).limit().sort({product_id:-1})
+   
+        res.json({
+           status:"success",
+           result:product.length,
+           product:product
+        })
      } catch (err) {
          res.status(400).json(err.msg)
      }
@@ -53,7 +71,19 @@ const productsCtrl = {
 
     },
     updateProduct:async(req,res)=>{
-        
+        try {
+         const {title,price,description,content,images,category} = req.body
+         if(!images){
+            return res.status(400).json({msg:"no image upload"})
+         }
+        await Products.findByIdAndUpdate(req.params.id,{
+            title,price,description,content,images,category
+         })
+         return res.json({msg:"update successfull"})
+        } catch (err) {
+        res.status(500).json(err.message)
+           
+        }
     },
     deleteProduct:async(req,res)=>{
        try {

@@ -6,7 +6,7 @@ router.route("/product")
 .get(auth,productsCtrl.getProduct)
 .post(auth,authAdmin,productsCtrl.createProduct)
 
-router.route("/product:id")
+router.route("/product/:id")
 .put(auth,authAdmin,productsCtrl.updateProduct)
 .delete(auth,authAdmin,productsCtrl.deleteProduct)
 

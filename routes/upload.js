@@ -23,7 +23,7 @@ cloudinary.config({
       return res.status(400).json({msg:"file size too large"})
      } 
 
-     if(file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/png'  ){
+     if(file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/png'&& file.mimetype !== 'image/webp'   ){
       removeTmp(file.tempFilePath)
        return res.status(400).json({msg:"file formate is incorrect"})
      }
@@ -31,7 +31,7 @@ cloudinary.config({
        if(err){
          throw err
        }
-       res.json({public_id:result.public_id,secure_ur:result.secure_url})
+       res.json({public_id:result.public_id,url:result.url})
      })
     
   }catch(err){

@@ -3,7 +3,7 @@ const productsCtrl = require('../controllers/productsCtrl')
 const auth = require('../middlewares/auth')
 const authAdmin = require('../middlewares/authAdmin')
 router.route("/product")
-.get(auth,productsCtrl.getProduct)
+.get(productsCtrl.getProduct)
 .post(auth,authAdmin,productsCtrl.createProduct)
 
 router.route("/product/:id")

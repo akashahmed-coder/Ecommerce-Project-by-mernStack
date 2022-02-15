@@ -5,14 +5,16 @@ import ProductItem from '../utiles/productItem/ProductItem'
 export default function Products() {
   const state = useContext(GlobleState)
   const [products] = state.productsAPI.products 
-  return <div>
+  // console.log(products)
+  return <div className='products'>
      {
-       products.map(product=>{
-            
-           return(
-            <ProductItem key={product._id} product={product}/>
-           )
+       products.map((product)=>{
+            console.log(product)
+          
+         return(
+           <ProductItem key={product._id} product={product}/>
+         )     
        })
      }
   </div>;
-}
+}   

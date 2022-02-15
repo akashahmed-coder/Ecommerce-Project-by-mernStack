@@ -3,6 +3,7 @@ import Login from './auth/Login';
 import Register from './auth/Register';
 import Cart from './cart/Cart';
 import Products from './products/Products';
+import DetialsProduct from './detialsProduct/DetialsProduct';
 import NotFound from './utiles/not_Found/NotFound';
 import {
   Route,Switch
@@ -14,6 +15,7 @@ function Pages() {
 
     <Switch>
     <Route path="/" exact component={Products}/>
+    <Route path="/details/:id" exact component={DetialsProduct}/>
     <Route path="/login" exact component={Login}/>
     <Route path="/register" exect component={Register}/>
     <Route path="/cart" exact component={Cart}/>

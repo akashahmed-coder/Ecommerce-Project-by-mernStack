@@ -20,7 +20,7 @@ class APIfeatures {
       if(this.queryString.sort){
          
          const sortBy = this.queryString.sort.split(',').join('')
-         console.log(sortBy)
+        
          this.qurey = this.query.sort(sortBy)
       }else{
          this.query.sort("-createdAt")

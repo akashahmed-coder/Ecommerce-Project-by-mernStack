@@ -33,3 +33,5 @@
       cursor: pointer;
   }
   @import url('./component/headers/header.css');
+  @import url('./component/mainpages/products/product.css');
+  @import url('./component/mainpages/detialsProduct/detialsProduct.css');

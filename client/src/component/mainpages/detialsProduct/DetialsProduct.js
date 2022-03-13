@@ -2,11 +2,15 @@ import React,{useContext, useEffect, useState} from 'react'
 import { GlobleState } from '../../../GlobleState'
 import { useParams,Link } from 'react-router-dom'
 import ProductItem from '../utiles/productItem/ProductItem'
+import { set } from 'mongoose'
 export default function DetialsProduct() {
     const state = useContext(GlobleState)
     const [products] = state.productsAPI.products
     const params = useParams()
     const [detailsProduct , setDetailsProducts] = useState([])
+
+
+   
 
     useEffect(()=>{
        if(params.id){
@@ -14,7 +18,7 @@ export default function DetialsProduct() {
               if (product._id === params.id) setDetailsProducts(product)
            })
        }
-    },[params.id])
+    },[params.id,products])
     if(detailsProduct.length === 0) return null       
 
   return (
@@ -40,9 +44,11 @@ export default function DetialsProduct() {
    <div className='products'> 
     
     {
-      products.map(product => {
-        return product.category === detailsProduct.category
+ products.map(product => {
+
+        return product.category === detailsProduct.category && product._id !== params.id
         ? <ProductItem key={product._id}  product={product}/>:null
+
       })
     }
      

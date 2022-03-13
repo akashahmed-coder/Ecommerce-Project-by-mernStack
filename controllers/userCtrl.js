@@ -7,15 +7,21 @@ const userCtrl = {
            const {name,email,password} = req.body
           const user = await User.findOne({email})
           if(user){
-            return  res.status(400).json({err:"this email has already present"})
+            return  res.status(400).json({msg:"this email has already present"})
           }
      if(password.length < 6){
-          return  res.status(400).json({err:"password needed atlest 6 charactor"})
+          return  res.status(400).json({msg:"password needed atlest 6 charactor"})
             
           }
           const passwordHash = await bycrpt.hash(password,10)
           const newUser = new User({name,email,password:passwordHash})
           await newUser.save()
+          const refreshToken = createRefreshToken({id: newUser.id})
+          res.cookie('refreshToken',refreshToken,{
+              httpOnly:true,
+              path:"/user/refresh_token"
+     
+          })
           res.send("registration success")
           
         }catch(err){
@@ -29,13 +35,13 @@ const userCtrl = {
         const user = await User.findOne({email})
    
         if(!user){
-          return  res.status(400).json({erorr:"user dosenot exist"})
+          return  res.status(400).json({msg:"user dosenot exist"})
         }
       
         const isMatch = await bycrpt.compare(password,user.password)
    
         if(!isMatch){
-            return  res.status(400).json({erorr:"password doesnot match"})
+            return  res.status(400).json({msg:"password doesnot match"})
         }
            
         const accessToken = createAccessToken({id: user.id})
@@ -48,7 +54,7 @@ const userCtrl = {
         res.json({accessToken})
      
      }catch(err){
-        res.status(500).send(err.message)
+        res.status(500).Json(err.message)
      }
 
     },
@@ -82,7 +88,7 @@ const userCtrl = {
     getUser: async (req,res) =>{
      try {
        const user = await User.findById(req.user.id).select("-password")
-       if(!user) return res.status(400).json({msj:"User Does Not Exist"})
+       if(!user) return res.status(400).json({msg:"User Does Not Exist"})
        res.json(user)
      } catch (error) {
        res.status(500).json({error})

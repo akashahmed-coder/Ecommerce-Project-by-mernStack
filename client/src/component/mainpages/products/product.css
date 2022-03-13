@@ -68,3 +68,8 @@ margin: 20px 0;
     background-color: teal;
     margin-left: 5px;
 }
+.product_card input {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+}

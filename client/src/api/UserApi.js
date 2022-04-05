@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React,{useState,useEffect} from 'react'
+import{useState,useEffect} from 'react'
 
 
 export default function UserApi(token) {
@@ -17,7 +17,7 @@ export default function UserApi(token) {
                 })
                setIsLogged(true)
                res.data.role === 1 ? setIsAdmin(true): setIsAdmin(false)
-
+               setCart(res.data.cart)
                
              } catch (err) {
                  alert(err.response.data.msg)
@@ -32,7 +32,12 @@ const addCart = async(product) => {
         return item._id !== product._id
     })
     if(check){
-       return setCart([...cart,{...product,quantity:1}])
+      setCart([...cart,{...product,quantity:1}])      //dont understand this part//
+      
+      await axios.patch('/user/addcart',{cart:[...cart,{...product,quantity:1}]},{
+          headers:{Authorization:token}
+      })
+     return alert('this product is added to cart')
     }else{
         alert('this product is already added to cart')
     }

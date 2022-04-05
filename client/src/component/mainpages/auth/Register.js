@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Login() {
@@ -26,6 +26,9 @@ export default function Login() {
       alert(err.response.data.msg) 
     }
   }
+  useEffect(()=>{
+    document.title = 'Register'
+  })
   return <div className='login-page'>
      <h2>Register</h2>
          <form onSubmit={loginSubmit}>

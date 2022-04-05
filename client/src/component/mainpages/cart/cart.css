@@ -19,6 +19,7 @@
     right: 5px;
     font-weight: 900;
     color: crimson;
+    cursor: pointer;
 }
 .total{
     width: 100%;

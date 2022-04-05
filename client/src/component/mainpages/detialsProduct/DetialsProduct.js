@@ -6,6 +6,7 @@ import { set } from 'mongoose'
 export default function DetialsProduct() {
     const state = useContext(GlobleState)
     const [products] = state.productsAPI.products
+    const addCart = state.userApi.addCart
     const params = useParams()
     const [detailsProduct , setDetailsProducts] = useState([])
 
@@ -34,7 +35,7 @@ export default function DetialsProduct() {
          <p>{detailsProduct.content}</p>
          <p>{detailsProduct.description}</p>
          <p>Sold: {detailsProduct.sold}</p>
-         <Link to='/cart' className='cart'>Buy Now</Link>
+         <Link to='/cart' className='cart' onClick={()=>addCart(detailsProduct)}>Buy Now</Link>
 
        </div>
     </div>

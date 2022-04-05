@@ -1,20 +1,84 @@
-import React, { useContext,useState } from 'react';
+import React, { useContext,useEffect,useState } from 'react';
 import { GlobleState } from '../../../GlobleState';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import PaypalButton from './PaypalButton'
 export default function Cart() {
   const state = useContext(GlobleState)
-  const [cart] = state.userApi.cart
+  const [cart,setCart] = state.userApi.cart
   const [total,settotal] = useState(0)
- if(cart.length === 0){
-   return <h1 style={{textAlign:"center",fontSize:"5rem"}}>Cart Empty</h1>
+  const [token] = state.token
+
+
+ 
+ 
+ useEffect(()=>{
+    const getTotal = () => {
+
+      const total = cart.reduce((prev, item)=>{
+        return prev + (item.price*item.quantity)
+         },0)
+         settotal(total)
+    }
+    getTotal()
+    document.title = `Cart (${cart.length})`
+ },[cart])
+ const addCart = async() => {
+  await axios.patch("/user/addcart",{cart},{
+    headers:{Authorization:token}
+  })
+}
+ const increment = (id) => {
+    cart.forEach(item =>{
+      if(item._id === id){
+        item.quantity += 1
+      }
+      
+    })
+    setCart([...cart])
+    addCart()
  }
+ const decrement = (id) => {
+  cart.forEach(item =>{
+    if(item._id === id){
+      item.quantity === 1? item.quantity = 1 : item.quantity -= 1
+    }
+    
+  })
+  setCart([...cart])
+  addCart()
+}
+const removeProduct = (id) =>{
+ cart.forEach((item, index)=>{
+   if(item._id === id){
+     cart.splice(index,1)
+   }
+ })
+ setCart([...cart])
+ addCart()
+}
+
+
+ if(cart.length === 0){
+  return <h1 style={{textAlign:"center",fontSize:"5rem"}}>Cart Empty</h1>
+}
+const tranSuccess = async (payment) => {
+
+      const {paymentID,address} = payment
+      await axios.post("/api/payment", {cart,paymentID ,address},{
+        headers:{Authorization:token}
+      })
+      setCart([])
+      addCart()
+      alert("you have successfully placed an order")
+
+}
   return <div>
       {
         cart.map(product =>{
           return(
             
           <div className='detail cart' key={product._id}>
-          <img src={product.images.url} alt="" className='img_container'/>
+          <img src={product.images.url} alt="" />
           <div className='box-detail'>
               <h2>{product.title}</h2>
             <span>{product.price * product.quantity}</span>
@@ -22,11 +86,11 @@ export default function Cart() {
             <p>{product.description}</p>
            
            <div className='amount'>
-             <button>-</button>
+             <button onClick={()=>decrement(product._id)}>-</button>
              <span>{product.quantity}</span>
-             <button>+</button>
+             <button onClick={()=>increment(product._id)}>+</button>
            </div>
-           <div className='delete'>✖</div>
+           <div className='delete' onClick={()=>removeProduct(product._id)}>✖</div>
 
          
    
@@ -38,7 +102,7 @@ export default function Cart() {
       }
       <div className='total'>
           <h3>total: {total}</h3>
-          <Link to='#!'>Payment</Link>
+          <PaypalButton total={total} tranSuccess ={tranSuccess}/>
           </div>
   </div>
 }

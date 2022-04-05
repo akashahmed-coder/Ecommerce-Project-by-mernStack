@@ -9,15 +9,14 @@ import axios from 'axios';
 
 function Header() {
   const state = useContext(GlobleState)
-  const [isLogged,setIsLogged] = state.userApi.isLogged
-  const [isAdmin,setIsAdmin] = state.userApi.isAdmin
+  const [isLogged] = state.userApi.isLogged
+  const [isAdmin] = state.userApi.isAdmin
   const [cart] = state.userApi.cart
 
    const logout = async () => {
       await axios.get('/user/logout')
       localStorage.clear()
-      setIsLogged(false)
-      setIsAdmin(false)
+     window.location.href ="/"
    }
   const adminRouter = () => {
    return(
@@ -32,6 +31,7 @@ function Header() {
     return(
       <>
     <li><Link to='/history'>History</Link></li>
+    {isAdmin?"":<li><Link to='/history'>Profile</Link></li>}
     <li><Link to='/' onClick={logout}>Logout</Link></li>
     </>
     )

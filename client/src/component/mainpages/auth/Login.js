@@ -1,12 +1,11 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Login() {
   const [user,setUser] = useState({
     email:'',password:''
   })
-
 
 
   const onChangeInput = (e) =>{
@@ -26,6 +25,9 @@ export default function Login() {
       alert(err.response.data.msg) 
     }
   }
+  useEffect(()=>{
+    document.title = 'Log in'
+  })
   return <div className='login-page'>
     <h2>log in</h2>
          <form onSubmit={loginSubmit}>
@@ -36,7 +38,6 @@ export default function Login() {
           <button type='submit'>Login</button>
           <Link to='/register'>Register</Link>
         </div>
-
           </form>     
   </div>;
 }

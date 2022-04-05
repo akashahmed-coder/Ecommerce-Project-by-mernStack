@@ -1,6 +1,7 @@
 const User = require('../models/userModel')
 const bycrpt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+// const { findOneAndUpdate } = require('../models/userModel')
 const userCtrl = {
     register: async(req,res)=>{
         try{
@@ -90,9 +91,22 @@ const userCtrl = {
        const user = await User.findById(req.user.id).select("-password")
        if(!user) return res.status(400).json({msg:"User Does Not Exist"})
        res.json(user)
-     } catch (error) {
-       res.status(500).json({error})
+     } catch (err) {
+       res.status(500).json({msg:err.message})
      }
+    },
+    addCart: async (req,res) =>{
+      try {
+        const user = await User.findById(req.user.id) 
+      if(!user){
+        return res.status(400).json({msg:"user doesnot exist"})
+      }
+      await User.findOneAndUpdate({_id:req.user.id},{cart:req.body.cart})
+      res.json({msg:"cart is added"})
+      } catch (err) {
+       res.status(500).json({msg:err.message})
+        
+      }
     }
 }
 

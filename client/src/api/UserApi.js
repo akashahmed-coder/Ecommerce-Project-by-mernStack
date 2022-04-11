@@ -8,7 +8,9 @@ export default function UserApi(token) {
     const [cart,setCart] = useState([])
   
     useEffect(()=>{
+
      if(token){
+         console.log("hi")
          const getUser = async() =>{
              try {
 

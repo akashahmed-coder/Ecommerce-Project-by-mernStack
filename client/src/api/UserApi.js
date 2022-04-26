@@ -6,6 +6,8 @@ export default function UserApi(token) {
     const [isLogged,setIsLogged] = useState(false)
     const [isAdmin,setIsAdmin] = useState(false)
     const [cart,setCart] = useState([])
+    const [history, setHistory] = useState([])
+    const [callback,setCallback] = useState(false)
   
     useEffect(()=>{
 
@@ -28,6 +30,31 @@ export default function UserApi(token) {
          getUser()
      }
     },[token])
+
+
+    useEffect(()=>{
+        if(token){
+          const getHistory = async () => {
+             
+                 if(isAdmin){
+                    const res = await axios.get("/api/payment",{
+                        headers:{Authorization:token}
+                    })
+                    setHistory(res.data)
+                  
+                 }else{
+                    const res = await axios.get("/user/history",{
+                        headers:{Authorization:token}
+                    })
+                    setHistory(res.data.history)
+                 }
+              
+          }
+          getHistory()
+        }
+    },[token,callback,isAdmin])
+
+
 const addCart = async(product) => {
     if(!isLogged) return alert('please login to buying product')
     const check = cart.every(item => {
@@ -51,6 +78,8 @@ const addCart = async(product) => {
       isLogged: [isLogged,setIsLogged],
       isAdmin:[isAdmin,setIsAdmin],
       cart:[cart,setCart],
-      addCart:addCart
+      addCart:addCart,
+      history:[history, setHistory],
+      callback:[callback,setCallback]
   }
 }

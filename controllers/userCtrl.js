@@ -1,4 +1,5 @@
 const User = require('../models/userModel')
+const Payment = require("../models/paymentModel")
 const bycrpt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 // const { findOneAndUpdate } = require('../models/userModel')
@@ -106,6 +107,14 @@ const userCtrl = {
       } catch (err) {
        res.status(500).json({msg:err.message})
         
+      }
+    },
+    history: async (req,res) => {
+      try {
+        const history = await Payment.find({user_id:req.user.id})
+        res.json({history})
+      } catch (err) {
+        res.status(500).send(err.message)
       }
     }
 }

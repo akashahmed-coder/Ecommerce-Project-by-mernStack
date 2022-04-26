@@ -31,6 +31,17 @@ const paymentCtrl ={
             res.status(500).json({msg:err.message})
             
         }
+    },
+    updateStatus: async (req,res) =>{
+        try {
+            const {status} = req.body
+           await Payment.findByIdAndUpdate({_id:req.params.id} , {status})
+           res.json({msg:"status Update"})
+
+
+        } catch (err) {
+            res.status(500).json({msg:err.message})
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import PaypalButton from './PaypalButton'
 export default function Cart() {
   const state = useContext(GlobleState)
   const [cart,setCart] = state.userApi.cart
+  const [callback,setCallback] = state.userApi.callback
   const [total,settotal] = useState(0)
   const [token] = state.token
 
@@ -71,6 +72,7 @@ const tranSuccess = async (payment) => {
       setCart([])
       addCart([])
       alert("you have successfully placed an order")
+      setCallback(!callback)
 
 }
   return <div>

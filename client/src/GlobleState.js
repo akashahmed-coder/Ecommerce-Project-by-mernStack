@@ -3,6 +3,7 @@ import  React,{ createContext , useState,useEffect } from 'react';
 import ProductsApi from './api/ProductsApi';
 import UserApi from './api/UserApi';
 import axios from 'axios'
+import CategoryApi from './api/CategoryApi';
 
 export const GlobleState = createContext()
 
@@ -21,7 +22,8 @@ export const DataProvider = ({children})=>{
    const state = {
      token:[token,setToken],
      productsAPI:ProductsApi(),
-     userApi:UserApi(token)
+     userApi:UserApi(token),
+     categoryApi:CategoryApi(token)
    }
 return(
   <GlobleState.Provider value={state}>

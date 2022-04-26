@@ -31,7 +31,7 @@ function Header() {
     return(
       <>
     <li><Link to='/history'>History</Link></li>
-    {isAdmin?"":<li><Link to='/history'>Profile</Link></li>}
+    {isAdmin?"":<li><Link to='/profile'>Profile</Link></li>}
     <li><Link to='/' onClick={logout}>Logout</Link></li>
     </>
     )

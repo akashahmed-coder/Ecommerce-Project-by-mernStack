@@ -37,4 +37,5 @@
   @import url('./component/mainpages/detialsProduct/detialsProduct.css');
   @import url('./component/mainpages/auth/login.css');
   @import url('./component/mainpages/cart/cart.css');
-  @import url('./component/mainpages/history/histrory.css')
+  @import url('./component/mainpages/history/histrory.css');
+  @import url('./component/mainpages/categoris/categori.css')

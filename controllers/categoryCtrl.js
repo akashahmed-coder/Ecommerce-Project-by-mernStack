@@ -34,7 +34,12 @@ const categoryCtrl = {
    },
     updateCategory:async(req,res)=>{
     try{
-    const {name} = req.body
+     const {name} = req.body
+      if(!name) return res.status(400).json({msg:"please type a category name"})
+
+    const category = await Category.findOne({name})
+    if(category) return  res.status(400).json({msg:"category is already created"})
+
     await Category.findByIdAndUpdate({_id:req.params.id},{name})
     res.json({msg:"update success"})
     

@@ -1,12 +1,38 @@
-import React,{useState,useContext} from 'react'
+import React,{useState,useContext,useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { GlobleState } from '../../../GlobleState'
+import axios from 'axios'
+
 
 export default function OderHistory() {
     const state = useContext(GlobleState)
     const [history,setHistory] = state.userApi.history
     const [isAdmin] = state.userApi.isAdmin
+    const [token] = state.token
     
+
+
+    useEffect(()=>{
+        if(token){
+          const getHistory = async () => {
+             
+                 if(isAdmin){
+                    const res = await axios.get("/api/payment",{
+                        headers:{Authorization:token}
+                    })
+                    setHistory(res.data)
+                  
+                 }else{
+                    const res = await axios.get("/user/history",{
+                        headers:{Authorization:token}
+                    })
+                    setHistory(res.data.history)
+                 }
+              
+          }
+          getHistory()
+        }
+    },[token,isAdmin])
   return (
     <div className='history-page'>
          <h2>History</h2>

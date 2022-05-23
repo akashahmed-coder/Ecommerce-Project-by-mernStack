@@ -58,6 +58,6 @@ const addCart = async(product) => {
       isAdmin:[isAdmin,setIsAdmin],
       cart:[cart,setCart],
       addCart:addCart,
-      history:[history, setHistory],
+      history:[history, setHistory]
   }
 }

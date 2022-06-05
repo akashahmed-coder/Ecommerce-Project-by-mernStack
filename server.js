@@ -4,9 +4,14 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const fileUpload = require('express-fileupload')
 const cookieParser = require('cookie-parser')
+const path = require('path')
 
 
 const app = express()
+app.use(express.static(path.join(__dirname, "client", "build")))
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())

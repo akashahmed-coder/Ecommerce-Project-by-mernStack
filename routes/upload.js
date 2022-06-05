@@ -50,7 +50,7 @@ cloudinary.config({
     })
   
   }catch(err){
-    req.status(500).json(err.message)
+    res.status(500).json(err.message)
   }
  })
 

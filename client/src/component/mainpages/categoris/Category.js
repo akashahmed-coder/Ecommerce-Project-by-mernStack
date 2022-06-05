@@ -17,14 +17,14 @@ const createCategory = async (e) => {
   e.preventDefault();
   try {
    if(onEdit){
-    const res = await axios.put(`/api/category/${id}`,{name:category},{
+    const res = await axios.put(`/api/category/${id}`,{name:category.toLowerCase()},{
       headers:{Authorization:token}
       
     })
     alert(res.data.msg)
     
    }else{
-    const res = await axios.post("/api/category",{name:category},{
+    const res = await axios.post("/api/category",{name:category.toLowerCase()},{
       headers:{Authorization:token}
     })
     alert(res.data.msg)

@@ -41,3 +41,6 @@
     border: 1px solid #ccc;
     padding: 10px;
 }
+.categories .row p{
+    text-transform: capitalize;
+}

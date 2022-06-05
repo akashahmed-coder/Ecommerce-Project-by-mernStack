@@ -9,6 +9,7 @@ export default function DetialsProduct() {
     const addCart = state.userApi.addCart
     const params = useParams()
     const [detailsProduct , setDetailsProducts] = useState([])
+    const [productCategory,setProductCategory] = useState([])
 
 
    
@@ -20,6 +21,8 @@ export default function DetialsProduct() {
            })
        }
     },[params.id,products])
+
+
     if(detailsProduct.length === 0) return null       
 
   return (

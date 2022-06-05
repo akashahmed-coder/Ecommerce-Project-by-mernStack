@@ -21,7 +21,8 @@ const userCtrl = {
           const refreshToken = createRefreshToken({id: newUser.id})
           res.cookie('refreshToken',refreshToken,{
               httpOnly:true,
-              path:"/user/refresh_token"
+              path:"/user/refresh_token",
+              maxAge: 7*24*60*60*1000
      
           })
           res.send("registration success")
@@ -50,7 +51,8 @@ const userCtrl = {
         const refreshToken = createRefreshToken({id: user.id})
         res.cookie('refreshToken',refreshToken,{
             httpOnly:true,
-            path:"/user/refresh_token"
+            path:"/user/refresh_token",
+            maxAge: 7*24*60*60*1000
    
         })
         res.json({accessToken})
@@ -120,12 +122,12 @@ const userCtrl = {
 }
 
 const createAccessToken = (user) =>{
- const token =  jwt.sign(user,process.env.ACCESS_TOKEN,{expiresIn:'15s'})
+ const token =  jwt.sign(user,process.env.ACCESS_TOKEN,{expiresIn:'1d'})
  return(token)
 }
 
 const createRefreshToken = (user) =>{
-    const token =  jwt.sign(user,process.env.REFRESS_TOKEN,{expiresIn:'1d'})
+    const token =  jwt.sign(user,process.env.REFRESS_TOKEN,{expiresIn:'7d'})
     return(token)
    }
 

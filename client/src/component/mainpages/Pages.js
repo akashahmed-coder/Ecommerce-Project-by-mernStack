@@ -9,6 +9,7 @@ import  OderHistory  from './history/OderHistory';
 import DetailsHistory from './detailHistory/DetailsHistory';
 import Category from './categoris/Category';
 import Status from './history/Status';
+import CreateProduct from './createProduct/CreateProduct';
 import {
   Route,Switch
 } from "react-router-dom";
@@ -30,6 +31,7 @@ function Pages() {
     <Route path="/cart" exact component={isAdmin? NotFound : Cart}/>
     <Route path="/category" exact component={isAdmin? Category : NotFound}/>
     <Route path="/status/:id" exact component={isAdmin? Status : NotFound}/>
+    <Route path="/create_product" exact component={isAdmin? CreateProduct : NotFound}/>
 
 
     <Route path="*" exact component={NotFound}/>

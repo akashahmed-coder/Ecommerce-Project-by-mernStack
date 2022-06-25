@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import {useParams,useHistory} from 'react-router-dom'
 import axios from 'axios'
 import { GlobleState } from '../../../GlobleState'
 import Loading from '../utiles/loading/Loading'
@@ -9,7 +10,8 @@ const initialState = {
   price:0,
   description:"is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500sdescription",
   content:"content",
-  category:""
+  category:"",
+  _id:''
 
 }
 export default function CreateProduct() {
@@ -18,9 +20,13 @@ export default function CreateProduct() {
   const [callback,setCallback] = state.productsAPI.callback
   const [token] = state.token
   const [isAdmin] = state.userApi.isAdmin
+  const [products] = state.productsAPI.products
   const [product,setProduct] = useState(initialState)
   const [images,setImages] = useState(false)
   const [loading,setLoading] = useState(false)
+  const [onEdit,setOneEdit] = useState(false)
+  const params = useParams()
+  const history = useHistory()
 
 
   const handleFileChange = async(e) => {
@@ -53,7 +59,7 @@ export default function CreateProduct() {
   const ClearImage = async() => {
     try {
       setLoading(true)
-      const res = await axios.post("api/destroy",{public_id:images.public_id,tempFilePath:images.tempFilePath},{
+      const res = await axios.post("/api/destroy",{public_id:images.public_id},{
         headers:{Authorization:token}
       })
       setLoading(false)
@@ -70,21 +76,43 @@ export default function CreateProduct() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const res = await axios.post("/api/product",{...product,images},{
-        headers:{Authorization:token}
-      })
-      alert(res.data.msg)
+      if(onEdit){
+        const res = await axios.put(`/api/product/${params.id}`,{...product,images},{
+          headers:{Authorization:token}
+        })
+      }else{
+        const res = await axios.post("/api/product",{...product,images},{
+          headers:{Authorization:token}
+        })
+      }
+      
       setCallback(!callback)
-      setImages(false)
-      setProduct(initialState)
+      history.push('/')
  
     } catch (err) {
       alert(err.response.data.msg)
     }
   }
+  useEffect(()=>{
+    if(params.id){
+        products.forEach(product => {
+          if(product._id === params.id){
+            setProduct(product)
+            setImages(product.images)
+            setOneEdit(true)
+          }
+        })
+    }else{
+          setProduct(initialState)
+          setImages(false)
+          setOneEdit(false)   
+    }
+
+  },[params.id,products])
   const styleUpload = {
     display: images?'block':'none'
   }
+
   return (
     <div className='create_product'>
       <div className='upload'>
@@ -102,7 +130,7 @@ export default function CreateProduct() {
       <form onSubmit={handleSubmit}>
         <div className='row'>
            <label htmlFor='product_id'>Product Id</label>
-           <input type='text' name='product_id' value={product.product_id} id="product_id" required onChange={handleInput}/>
+           <input type='text' name='product_id' value={product.product_id} id="product_id" required onChange={handleInput} disabled={onEdit}/>
         </div>
         <div className='row'>
            <label htmlFor='title'>Title</label>
@@ -133,7 +161,7 @@ export default function CreateProduct() {
                }
             </select>
         </div>
-          <button type='submit'>Create</button>
+          <button type='submit'>{onEdit?'Update':'Create'}</button>
       </form>
       
     </div>

@@ -73,3 +73,25 @@ margin: 20px 0;
     height: 25px;
     position: absolute;
 }
+.delete-all{
+    text-align: right;
+    margin: 25px;
+}
+.delete-all input{
+    height: 25px;
+    width: 25px;
+    margin: 0 15px;
+    transform: translateY(5px);
+
+}
+.delete-all span{
+    text-transform: uppercase;
+    color: rgb(3,165,206);
+    letter-spacing: 1.3px;
+}
+.delete-all button{
+    text-transform: uppercase;
+    border: 1px solid crimson;
+    padding: 10px 25px;
+    
+}

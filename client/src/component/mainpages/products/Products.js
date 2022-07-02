@@ -68,7 +68,7 @@ const deleteAll = () => {
       isAdmin && <div className='delete-all'>
         <span>Select All</span>
         <input type='checkbox' checked={isAllChecked} onChange={handleAllCheck}/>
-        <button onClick={deleteAll}>{isAllChecked?'Delete All':"Delete Select Item"}</button>
+        <button onClick={deleteAll}>Delete Select Item</button>
       </div>
     }
     <div className='products'>

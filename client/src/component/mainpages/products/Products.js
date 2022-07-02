@@ -2,6 +2,8 @@ import React,{useContext, useEffect, useState} from 'react';
 import {GlobleState} from '../../../GlobleState'
 import ProductItem from '../utiles/productItem/ProductItem'
 import Loading from '../utiles/loading/Loading';
+import Filters from './Filters';
+import LoadMore from './LoadMore';
 import axios from 'axios';
 
 
@@ -60,11 +62,13 @@ const deleteAll = () => {
   if(loading) return <div className='products'><Loading/></div>
   return (
     <>
+    <Filters/>
     {
+      
       isAdmin && <div className='delete-all'>
         <span>Select All</span>
         <input type='checkbox' checked={isAllChecked} onChange={handleAllCheck}/>
-        <button onClick={deleteAll}>Delete All</button>
+        <button onClick={deleteAll}>{isAllChecked?'Delete All':"Delete Select Item"}</button>
       </div>
     }
     <div className='products'>
@@ -75,10 +79,14 @@ const deleteAll = () => {
         )     
       }) 
     }
-     {
-     products.length === 0 && <Loading/>
-     }
+  <LoadMore/>
  </div>
+   <div className='productPageLoader'>
+   {
+     products.length === 0 && <Loading/>
+  }
+   </div>
+   
  </>
   )
  

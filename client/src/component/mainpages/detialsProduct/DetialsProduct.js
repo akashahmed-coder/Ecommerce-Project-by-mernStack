@@ -5,22 +5,22 @@ import ProductItem from '../utiles/productItem/ProductItem'
 import { set } from 'mongoose'
 export default function DetialsProduct() {
     const state = useContext(GlobleState)
-    const [products] = state.productsAPI.products
+    const [allProducts] = state.productsAPI.allProducts
     const addCart = state.userApi.addCart
     const params = useParams()
     const [detailsProduct , setDetailsProducts] = useState([])
-    const [productCategory,setProductCategory] = useState([])
+ 
 
 
    
 
     useEffect(()=>{
        if(params.id){
-           products.forEach(product => {
+        allProducts.forEach(product => {
               if (product._id === params.id) setDetailsProducts(product)
            })
        }
-    },[params.id,products])
+    },[params.id,allProducts])
 
 
     if(detailsProduct.length === 0) return null       
@@ -48,7 +48,7 @@ export default function DetialsProduct() {
    <div className='products'> 
     
     {
- products.map(product => {
+ allProducts.map(product => {
 
         return product.category === detailsProduct.category && product._id !== params.id
         ? <ProductItem key={product._id}  product={product}/>:null

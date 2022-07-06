@@ -32,10 +32,10 @@ const selectChange = (e) => {
         </select>
       </div>
 
-      <input type='text' placeholder='Search Products' value={search} onChange={e=> setSearch(e.target.value)} />
+      <input type='text' placeholder='Search Products' value={search} onChange={e=> setSearch(e.target.value.toLowerCase())} />
 
-      <div className='row'>
-        <span>Filters: </span>
+      <div className='row sort'>
+        <span>Sort By: </span>
         <select name='sort' value={sort} onChange={e=> setSort(e.target.value)}>
              <option Value=''>Newest</option>
              <option Value='sort=oldest'>Oldest</option>
